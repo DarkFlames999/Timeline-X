@@ -1,50 +1,47 @@
 import pygame
-def run_game():
+from Core.event_handler import EventHandler
+from Core.Clock import Clock
+from Core.hashColor import HashColor
+from Core.input import InputManager
 
+class Game:
+    def __init__(self):
+        pygame.init()
+        self.active = False
+        self.event_handler = EventHandler()
+        self.clock = Clock()
+        self.input = InputManager()
 
-    # Initialize Pygame 
-    pygame.init()
+        self.window = pygame.Window()
+        self.window.get_surface()
 
-    # Create the game window 
-    info = pygame.display.Info()
+    def update(self):
+        self.input.update(self.clock.SDeltaTime)
 
-    player_speed = 25
+        if self.input["W"].Pressed:
+            print("Pressed")
+        if self.input["A", "left"].Pressed:
+            print("Left")
+        if self.input[all, 'W', 'S'].Held:
+            print("Held")
 
-    window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF)
+        print(self.input['W'])
 
-    clock = pygame.time.Clock()
+    def draw(self): ...
 
-    player_pos = pygame.Vector2(window.get_width() / 2, window.get_height() / 2)
+    def gameLoop(self):
+        self.clock.tick()
+        self.event_handler.handle()
 
-    pygame.display.set_caption("Timeline-X")
+        self.update()
 
-    running = True
+        self.window.get_surface().fill((0, 0, 0))
+        self.draw()
+        self.window.flip()
 
-    while running:
-        dt = clock.tick(240) / 1000   # high refresh rate OK!
+    def run(self):
+        self.active = True
+        while self.active:
+            self.gameLoop()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    pygame.display.toggle_fullscreen()
-        
-
-        keys = pygame.key.get_pressed()
-        if (keys[pygame.K_SPACE] or keys[pygame.K_w]):
-            player_pos.y -= player_speed * dt
-        if keys[pygame.K_s]:
-            player_pos.y += player_speed * dt
-        if keys[pygame.K_a]:
-            player_pos.x -= player_speed * dt
-        if keys[pygame.K_d]:
-            player_pos.x += player_speed * dt
-
-
-        window.fill((0, 0, 0))
-        pygame.draw.circle(window, "purple", player_pos, 10)
-        pygame.display.flip()
-
-    pygame.quit()
 

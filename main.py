@@ -1,3 +1,4 @@
-from Core import game
+from Core.game import Game
 
-game.run_game()
+
+Game().run()
